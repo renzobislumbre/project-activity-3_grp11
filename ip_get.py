@@ -1,6 +1,7 @@
 import requests
 import tkinter as tk
 from tkinter import messagebox
+import speedtest
 
 # Function to get IP information using ipapi
 def get_ip_info():
@@ -25,9 +26,34 @@ def get_ip_info():
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
 
+# Function to check internet speed and give an animal comparison
+def check_speed():
+    try:
+        st = speedtest.Speedtest()
+        st.get_best_server()
+        download_speed = st.download() / 1_000_000  # Convert to Mbps
+        
+        # Animal comparison based on download speed
+        if download_speed > 100:
+            animal = "cheetah (super fast!)"
+        elif download_speed > 50:
+            animal = "horse (fast!)"
+        elif download_speed > 10:
+            animal = "cat (moderate speed)"
+        elif download_speed > 1:
+            animal = "turtle (slow)"
+        else:
+            animal = "snail (very slow)"
+        
+        # Update the UI labels with the speed and animal comparison
+        speed_label.config(text=f"Download Speed: {download_speed:.2f} Mbps")
+        animal_label.config(text=f"Animal Comparison: {animal}")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to check speed: {e}")
+
 # Initialize the main window
 root = tk.Tk()
-root.title("IP Information App")
+root.title("IP Information and Speed Test App")
 root.geometry("600x500")
 root.configure(bg="#f5f5f5")
 
@@ -36,7 +62,7 @@ header_font = ("Arial", 16, "bold")
 info_font = ("Arial", 12)
 
 # Create a header label
-header_label = tk.Label(root, text="IP Address Information", font=header_font, bg="#f5f5f5", fg="#333333")
+header_label = tk.Label(root, text="IP Address and Internet Speed Information", font=header_font, bg="#f5f5f5", fg="#333333")
 header_label.pack(pady=10)
 
 # Create a button to trigger the IP lookup
@@ -55,6 +81,17 @@ isp_label.pack(pady=5)
 
 asn_label = tk.Label(root, text="ASN: N/A", font=info_font, bg="#f5f5f5", fg="#333333")
 asn_label.pack(pady=5)
+
+# Create a button to check internet speed
+speed_button = tk.Button(root, text="Check Internet Speed", command=check_speed, font=info_font, bg="#2196F3", fg="white", padx=10, pady=5)
+speed_button.pack(pady=20)
+
+# Labels to display internet speed and animal comparison
+speed_label = tk.Label(root, text="Download Speed: N/A", font=info_font, bg="#f5f5f5", fg="#333333")
+speed_label.pack(pady=5)
+
+animal_label = tk.Label(root, text="Animal Comparison: N/A", font=info_font, bg="#f5f5f5", fg="#333333")
+animal_label.pack(pady=5)
 
 # Run the application
 root.mainloop()
