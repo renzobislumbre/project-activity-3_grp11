@@ -3,5 +3,5 @@ Source code for Project Activity 3 by Group 11.
 
 Install Python First
 
-- pip install request
+- pip install requests
 - pip install speedtest-cli
