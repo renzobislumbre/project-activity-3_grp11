@@ -1,0 +1,44 @@
+name: Flask CI/CD Pipeline
+
+# Trigger the workflow on push or pull request to the 'main' branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Define the job that will run on GitHub's Ubuntu server
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Check out the repository
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Step 2: Set up Python environment
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Change this to the version you need
+
+    # Step 3: Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Step 4: Run tests (Optional if you have tests)
+    - name: Run tests
+      run: |
+        # Replace with your test command, like pytest or unittest
+        pytest
+
+    # Step 5: Deploy (Optional - no cloud deployment in this case)
+    # Add deployment steps if you want to deploy (skip if not needed)
+    - name: Deploy application (if necessary)
+      run: |
+        echo "Deploying the application..."  # Your deploy script here
