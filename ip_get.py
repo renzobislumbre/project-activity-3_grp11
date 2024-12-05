@@ -187,6 +187,8 @@ def check_speed():
             "animal": animal
         })
     except Exception as e:
+        # Log or print the error message
+        print(f"Error in /check_speed: {e}")
         return jsonify({"error": f"Failed to check speed: {e}"}), 500
 
 @app.route('/get_datetime')
